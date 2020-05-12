@@ -1,0 +1,129 @@
+<html>
+<head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="转盘抽奖">
+<meta name="description" content="转盘抽奖">
+<meta name="robots" content="all">
+<meta name="baiduspider" content="all">
+<meta name="googlebot" content="all">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta name="renderer" content="webkit">
+<title>转盘抽奖</title>
+<style>
+    body,html{margin:0px;padding:0px;}
+    body{background-color:#333;padding:10px;}
+    .wrapper{width:100%;max-width:375px;margin:0px auto;}
+    .part2{background:url(part2-bg.png) left top no-repeat;padding-top:100%;background-size:100% 100%;position:relative;}
+    .part2 .rotate-pointer{position:absolute;top:50%;left:50%;width:30%;height:30%;margin-left:-15%;margin-top:-15%;background:url(pointer.png) center center no-repeat;background-size:100% 100%;}
+
+    #pointer {
+      transition: transform 6.5s;
+      transition-timing-function: ease-in-out;
+    }
+    a {
+      color: #fff;
+    }
+</style>
+</head>
+<body>
+<div class="wrapper" id = "wrapper">
+    <div class = "part2">
+        <div id = "pointer" class = "rotate-pointer" data-click = ""></div>
+    </div>
+    <a href="./index-zp.html" target="_blank">旋转圆盘版</a>
+</div>
+<script src="./jquery.min.js"></script>
+<script>
+// 测试抽奖的
+(function(){
+    var btn = $("#pointer"),
+        options = {
+        };
+    var isEnd = false;
+    // 奖品的角度列表
+    options.gifts = {
+        "1":{
+            id : "1",
+            name : "理财金2000元",
+            angleStart : -30,
+            angleEnd : 30,
+            tips : "恭喜您获得理财金2000元~~"
+        },
+        "2":{
+            id : "2",
+            name : "理财金1000元",
+            angleStart : 31,
+            angleEnd : 90,
+            tips : "恭喜您获得理财金1000元~~"
+        },
+        "3":{
+            id : "3",
+            name : "谢谢参与",
+            angleStart : 91,
+            angleEnd : 150,
+            tips : "很遗憾没有能中奖，再试一次吧~"
+        },
+        "4":{
+            id : "4",
+            name : "京东E卡",
+            angleStart : 151,
+            angleEnd : 210,
+            tips : "恭喜您抽中京东E卡一张~"
+        },
+        "5":{
+            id : "5",
+            name : "理财金5200元",
+            angleStart : 211,
+            angleEnd : 270,
+            tips : "恭喜您获得理财金5200元~~"
+        },
+        "6":{
+            id : "6",
+            name : "谢谢参与",
+            angleStart : 271,
+            angleEnd : 330,
+            tips : "很遗憾没有能中奖，再试一次吧~"
+        }
+    };
+
+    // 获取[n,m]的随机整数
+    function getRandom (n, m) {
+        var num = Math.floor(Math.random() * (m - n + 1) + n)
+        return num
+    }
+    function _begin(){
+
+        var base = 2160; //和transition: transform 6.5s;对应 1圈用1s
+
+        var result = getRandom(-30,330); // 随机
+        
+        var _key = null; // 内定奖品id
+
+        if (_key) {
+          result = getRandom(options.gifts[_key].angleStart,options.gifts[_key].angleEnd)
+        }
+
+
+        var deg = -(base+result)
+
+
+
+        btn.css({"transform":"rotate("+deg+"deg)"});
+
+        btn.on('transitionend',function(){
+            for (var key in options.gifts) {
+
+              if (options.gifts[key].angleStart <= result && result<=options.gifts[key].angleEnd) {
+                confirm(options.gifts[key].tips);
+                window.location.reload()
+              }
+            }
+        })
+    }
+ 
+    btn.on("click",_begin);
+})();
+
+</script>
+</html>
